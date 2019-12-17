@@ -1,3 +1,4 @@
+#Vendo se fui liberado
 go_import_path: github.com/minio/minio
 
 language: go
