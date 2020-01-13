@@ -20,13 +20,13 @@ branches:
 matrix:
   include:
     - os: linux-ppc64le
-    dist: trusty
-    sudo: required
-    env:
-      - ARCH=ppc64le
-      - CGO_ENABLED=0
-      - GO111MODULE=on
-      - SIMPLE_CI=1
+      dist: trusty
+      sudo: required
+      env:
+        - ARCH=ppc64le
+        - CGO_ENABLED=0
+        - GO111MODULE=on
+        - SIMPLE_CI=1
       go: 1.13.x
       script:
         - make
