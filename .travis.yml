@@ -21,8 +21,7 @@ matrix:
   include:
     - os: linux
       arch: ppc64le
-      dist: trusty
-      sudo: required
+      dist: bionic
       env:
         - ARCH=ppc64le
         - CGO_ENABLED=0
