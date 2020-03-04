@@ -22,25 +22,38 @@ matrix:
     - os: linux
       arch: ppc64le
       dist: bionic
+      sudo: required
       env:
         - ARCH=ppc64le
         - CGO_ENABLED=0
         - GO111MODULE=on
-        - SIMPLE_CI=1
+      addons:
+        apt:
+          update: true
+          packages:
+            - jq
+            - shellcheck
       go: 1.13.x
       script:
         - make
         - diff -au <(gofmt -s -d cmd) <(printf "")
         - diff -au <(gofmt -s -d pkg) <(printf "")
-        - make test-race
+        - for d in $(go list ./... | grep -v browser); do CGO_ENABLED=1 go test -v --timeout 20m "$d"; done
+        #- make test
+        #- make test-race
+        - make verifiers
         - make crosscompile
-        - make verify
-        - cd browser && npm install && npm run test && cd ..
+        #- make verify
+        - curl -o- -L https://yarnpkg.com/install.sh | bash
+        - export PATH="$HOME/.yarn/bin:$PATH"
+        - cd browser && yarn && yarn test && cd ..
         - bash -c 'shopt -s globstar; shellcheck mint/**/*.sh'
+        - ./minio
 
 before_script:
-  - git clone https://github.com/minio/minio.git
+  - git clone --depth 1 https://github.com/minio/minio.git
   - cd minio
+  #- git checkout 8ae9f75d6daee8409a11bd50070be42739107db3
   # Add an IPv6 config - see the corresponding Travis issue
   # https://github.com/travis-ci/travis-ci/issues/8361
   - echo $TRAVIS_OS_NAME
