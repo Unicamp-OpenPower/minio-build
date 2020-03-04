@@ -52,8 +52,8 @@ matrix:
 
 before_script:
   - git clone --depth 1 https://github.com/minio/minio.git
-  - rm bazel/Makefile
-  - mv Makefile bazel/
+  - rm minio/Makefile
+  - mv Makefile minio/
   - cd minio
   #- git checkout 8ae9f75d6daee8409a11bd50070be42739107db3
   # Add an IPv6 config - see the corresponding Travis issue
