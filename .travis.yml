@@ -63,3 +63,10 @@ before_script:
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then nvm install stable ; fi
+
+notifications:
+  slack:
+    rooms:
+      - secure: "OmLuBvxMiay2sBLY5cEse9DMl7nZGxXllwR5Xz4x9G5f8L6sKvtlpQPXyagAh2c7yf7b50rQBrwb4/w1GXtO/mgbhlNZhb94eNzeCq+hAB5ApLMbtoACk+TlniOSuCNEch8X/2usgQDKZDKiAqk62uVmzhvWHkZqq9b/s5gicpa80skVfsNvpCCf9lFNeNAMMayDbUWq0qdExvLDfwWOesB8D8nY7qXdJcjCzJVqWK0GWdoUAKNkRNNWf/zcMIVgajJa1s9g2F6FZfBVE2qDtHJyMmbCpncxjcirFTq8CbHwuRslAYeLGSQX03Zt0RlD7GDywl2ilOX2kze0FOqCJ0fH4m/l3Q7UaJ34ON3X5+/KIlq8cNZiTtjM3HAfxOZ/8IY7ajAOduUMGuYmhDN18NTneY4uFMOqwRcaQIPglIoE3tv8LybPmO7dzKNLmUir1yKYUpYrc/oL8Z0bW3VhPJIXyavsTHZeI6B7WQ2/rS3psaY5Blxav0N43Vjf81hJvV/bYuN0ZVijmT0RWem254UGT4R13e33q1VNxL987oahOu/rcWHp1q+XQJLxLKrAS5QQbidwnYZ7KGZ/a/cKRh3HgawJFbwc/379Dlm7XWQWiHO0Bhh7Prl+WsxWDeY1OIdpfHDPxRhNldq+9YO1GV6cy1zk1X6de9is6uDxlEI="
+    on_success: change
+    on_failure: change
