@@ -44,11 +44,12 @@ matrix:
         - make verifiers
         - make crosscompile
         #- make verify
-        - curl -o- -L https://yarnpkg.com/install.sh | bash
-        - export PATH="$HOME/.yarn/bin:$PATH"
-        - cd browser && yarn && yarn test && cd ..
-        - bash -c 'shopt -s globstar; shellcheck mint/**/*.sh'
-        - ./minio
+        #- curl -o- -L https://yarnpkg.com/install.sh | bash
+        #- export PATH="$HOME/.yarn/bin:$PATH"
+        #- cd browser && yarn && yarn test && cd ..
+        #- bash -c 'shopt -s globstar; shellcheck mint/**/*.sh'
+        #- ./minio
+        - ls
 
 before_script:
   - git clone --depth 1 https://github.com/minio/minio.git
