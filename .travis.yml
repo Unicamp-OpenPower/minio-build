@@ -1,68 +1,44 @@
 go_import_path: github.com/minio/minio
 
+os: linux
+arch: ppc64le
+dist: bionic
+sudo: required
 language: go
+go:
+- "1.14.x"
+env:
+     - ARCH=ppc64le CGO_ENABLED=0 GO111MODULE=on
 
 addons:
   apt:
     packages:
     - shellcheck
+    - jq
     
 services:
   - docker
-
-# this ensures PRs based on a local branch are not built twice
-# the downside is that a PR targeting a different branch is not built
-# but as a workaround you can add the branch to this list
-branches:
-  only:
-    - master
-
-matrix:
-  include:
-    - os: linux
-      arch: ppc64le
-      dist: bionic
-      sudo: required
-      env:
-        - ARCH=ppc64le
-        - CGO_ENABLED=0
-        - GO111MODULE=on
-      addons:
-        apt:
-          update: true
-          packages:
-            - jq
-            - shellcheck
-      go: 1.13.x
-      script:
-        - make
-        - diff -au <(gofmt -s -d cmd) <(printf "")
-        - diff -au <(gofmt -s -d pkg) <(printf "")
-        - for d in $(go list ./... | grep -v browser); do CGO_ENABLED=1 go test -v --timeout 20m "$d"; done
-        #- make test
-        #- make test-race
-        - make verifiers
-        - make crosscompile
-        #- make verify
-        #- curl -o- -L https://yarnpkg.com/install.sh | bash
-        #- export PATH="$HOME/.yarn/bin:$PATH"
-        #- cd browser && yarn && yarn test && cd ..
-        #- bash -c 'shopt -s globstar; shellcheck mint/**/*.sh'
-        - ./minio
+  
+before_install:
+  - nvm install stable
 
 before_script:
   - git clone --depth 1 https://github.com/minio/minio.git
-  - rm minio/Makefile
-  - mv Makefile minio/
   - cd minio
   #- git checkout 8ae9f75d6daee8409a11bd50070be42739107db3
   # Add an IPv6 config - see the corresponding Travis issue
   # https://github.com/travis-ci/travis-ci/issues/8361
-  - echo $TRAVIS_OS_NAME
-  - if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then sudo sh -c 'echo 0 > /proc/sys/net/ipv6/conf/all/disable_ipv6'; fi
+  - sudo sh -c 'echo 0 > /proc/sys/net/ipv6/conf/all/disable_ipv6'
 
-before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then nvm install stable ; fi
+script:
+  - make
+  - diff -au <(gofmt -s -d cmd) <(printf "")
+  - diff -au <(gofmt -s -d pkg) <(printf "")
+  - for d in $(go list ./... | grep -v browser); do CGO_ENABLED=1 go test -v --timeout 20m "$d"; done
+  - make verifiers
+  - make crosscompile
+  - ./minio --version
+
 
 notifications:
   slack:
