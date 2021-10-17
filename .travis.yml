@@ -35,8 +35,8 @@ script:
   - diff -au <(gofmt -s -d cmd) <(printf "")
   - diff -au <(gofmt -s -d pkg) <(printf "")
   - for d in $(go list ./... | grep -v browser); do CGO_ENABLED=1 go test -v --timeout 20m "$d"; done
-  - travis_wait 20 make verifiers
-  - travis_wait 20 make crosscompile
+  - make -n verifiers
+  - make -n crosscompile
   - ./minio --version
 
 
