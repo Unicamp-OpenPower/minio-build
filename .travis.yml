@@ -6,7 +6,7 @@ dist: focal
 sudo: required
 language: go
 go:
-- "1.16.x"
+- "1.17.x"
 env:
      - ARCH=ppc64le CGO_ENABLED=0 GO111MODULE=on
 
